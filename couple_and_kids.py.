@@ -1,0 +1,64 @@
+class Person:
+    def __init__(self, name, is_stepchild=False):
+        self.name = name
+        self.is_stepchild = is_stepchild
+        self.parents = []
+
+    def add_parents(self, parent1, parent2):
+        self.parents.extend([parent1, parent2])
+
+    def is_step_child(self):
+        return self.is_stepchild
+
+
+class Couple:
+    def __init__(self, partner1, partner2):
+        self.partner1 = partner1
+        self.partner2 = partner2
+        self.children = []
+
+    def has_kids(self):
+        return len(self.children) > 0
+
+    def adopt(self, child):
+        if not self.has_kids():
+            self.children.append(child)
+            child.add_parents(self.partner1, self.partner2)
+            print(f"{self.partner1.name} and {self.partner2.name} adopted {child.name}.")
+        else:
+            print(f"{self.partner1.name} and {self.partner2.name} already have kids.")
+
+    def show_children(self):
+        if self.has_kids():
+            return [child.name for child in self.children]
+        else:
+            return "No children."
+
+
+# Example usage
+if __name__ == "__main__":
+    # Create parents
+    parent1 = Person("Alice")
+    parent2 = Person("Bob")
+
+    # Create couple
+    couple = Couple(parent1, parent2)
+
+    # Check if they have kids
+    print(couple.has_kids())  # Output: False
+
+    # Adopt a child
+    child1 = Person("Charlie")
+    couple.adopt(child1)
+
+    # Check if they have kids now
+    print(couple.has_kids())  # Output: True
+    print(couple.show_children())  # Output: ['Charlie']
+
+    # Check if the child is a stepchild
+    print(child1.is_step_child())  # Output: False
+
+    # Add a stepchild
+    stepchild = Person("Daisy", is_stepchild=True)
+    couple.adopt(stepchild)
+    print(stepchild.is_step_child())  # Output: True
